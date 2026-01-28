@@ -1,0 +1,843 @@
+[Menu1.html](https://github.com/user-attachments/files/24903364/Menu1.html)
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบขายอาหาร - พร้อมสรุปยอดขาย</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .btn-sales {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-sales:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+
+        .category-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab:hover {
+            background: #e9ecef;
+        }
+
+        .tab.active {
+            color: #11998e;
+            border-bottom-color: #11998e;
+            background: white;
+        }
+
+        .menu-section {
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .category-content {
+            display: none;
+        }
+
+        .category-content.active {
+            display: block;
+        }
+
+        .category-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #11998e;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .item-info h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .item-info p {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .item-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-qty {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: #11998e;
+            color: white;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-qty:hover {
+            background: #0d7a6f;
+            transform: scale(1.1);
+        }
+
+        .btn-qty:active {
+            transform: scale(0.95);
+        }
+
+        .quantity {
+            width: 40px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #11998e;
+            font-size: 16px;
+            min-width: 70px;
+            text-align: right;
+        }
+
+        .total-section {
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 2px dashed #ddd;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .total-label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .total-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #11998e;
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(17, 153, 142, 0.4);
+        }
+
+        .btn-pay:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(17, 153, 142, 0.6);
+        }
+
+        .btn-pay:active {
+            transform: translateY(0);
+        }
+
+        .btn-pay:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-content h2 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        .amount-display {
+            font-size: 32px;
+            font-weight: bold;
+            color: #11998e;
+            margin-bottom: 20px;
+        }
+
+        .qr-code-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            min-height: 270px;
+        }
+
+        #qrcode {
+            display: inline-block;
+        }
+
+        .btn-close {
+            width: 100%;
+            padding: 15px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-close:hover {
+            background: #5a6268;
+        }
+
+        .instruction {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        /* Sales Report Styles */
+        .sales-report {
+            text-align: left;
+        }
+
+        .sales-summary {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .sales-summary h3 {
+            color: #11998e;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 18px;
+            color: #11998e;
+            padding-top: 15px;
+            margin-top: 10px;
+            border-top: 2px solid #11998e;
+        }
+
+        .sales-history {
+            margin-top: 20px;
+        }
+
+        .sales-history h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .history-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .history-time {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .history-total {
+            color: #11998e;
+            font-size: 16px;
+        }
+
+        .history-items {
+            font-size: 13px;
+            color: #666;
+            padding-left: 10px;
+        }
+
+        .btn-reset {
+            width: 100%;
+            padding: 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-reset:hover {
+            background: #c82333;
+        }
+
+        .no-sales {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍜 เมนูอาหาร</h1>
+            <p>เลือกรายการและสแกนจ่ายได้เลย</p>
+            <button class="btn-sales" onclick="showSalesReport()">📊 ยอดขาย</button>
+        </div>
+
+        <div class="category-tabs">
+            <div class="tab active" onclick="switchCategory('hot')">🔥 อาหารร้อน</div>
+            <div class="tab" onclick="switchCategory('cold')">❄️ เครื่องดื่ม</div>
+        </div>
+
+        <div class="menu-section">
+            <div id="hot-menu" class="category-content active">
+                <div class="category-title">🔥 อาหารร้อน</div>
+                <div id="hotMenuItems"></div>
+            </div>
+
+            <div id="cold-menu" class="category-content">
+                <div class="category-title">❄️ เครื่องดื่ม</div>
+                <div id="coldMenuItems"></div>
+            </div>
+        </div>
+
+        <div class="total-section">
+            <div class="total-row">
+                <span class="total-label">ยอดรวม</span>
+                <span class="total-amount" id="totalAmount">0.00 ฿</span>
+            </div>
+            <button class="btn-pay" id="btnPay" disabled>สแกนจ่าย</button>
+        </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div class="modal" id="qrModal">
+        <div class="modal-content">
+            <h2>สแกนเพื่อชำระเงิน</h2>
+            <div class="amount-display" id="modalAmount">0.00 ฿</div>
+            <p class="instruction">สแกน QR Code ด้วยแอพธนาคาร</p>
+            <div class="qr-code-container">
+                <div id="qrcode"></div>
+            </div>
+            <button class="btn-close" onclick="closeQRModal()">ปิด</button>
+        </div>
+    </div>
+
+    <!-- Sales Report Modal -->
+    <div class="modal" id="salesModal">
+        <div class="modal-content sales-report">
+            <h2>📊 รายงานยอดขายวันนี้</h2>
+            <p class="instruction" id="reportDate"></p>
+            
+            <div class="sales-summary">
+                <h3>สรุปยอดขาย</h3>
+                <div class="summary-row">
+                    <span>จำนวนออเดอร์:</span>
+                    <span id="totalOrders">0 ออเดอร์</span>
+                </div>
+                <div class="summary-row">
+                    <span>อาหารร้อน:</span>
+                    <span id="hotFoodTotal">0.00 ฿</span>
+                </div>
+                <div class="summary-row">
+                    <span>เครื่องดื่ม:</span>
+                    <span id="coldDrinkTotal">0.00 ฿</span>
+                </div>
+                <div class="summary-row">
+                    <span>ยอดรวมทั้งหมด:</span>
+                    <span id="grandTotal">0.00 ฿</span>
+                </div>
+            </div>
+
+            <div class="sales-history">
+                <h3>ประวัติการขาย</h3>
+                <div id="salesHistoryList"></div>
+            </div>
+
+            <button class="btn-reset" onclick="resetDailySales()">🗑️ ล้างข้อมูลวันนี้</button>
+            <button class="btn-close" onclick="closeSalesModal()">ปิด</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        // Menu data with categories
+        const menuItems = [
+            // Hot food
+            { id: 1, name: 'ข้าวผัด', description: 'ข้าวผัดไข่พิเศษ', price: 45, category: 'hot' },
+            { id: 2, name: 'ผัดกะเพรา', description: 'ผัดกะเพราหมูสับ', price: 50, category: 'hot' },
+            { id: 3, name: 'ต้มยำกุ้ง', description: 'น้ำใส รสจัดจ้าน', price: 80, category: 'hot' },
+            { id: 4, name: 'ส้มตำ', description: 'ส้มตำไทยปูปลาร้า', price: 40, category: 'hot' },
+            { id: 5, name: 'ข้าวมันไก่', description: 'พร้อมน้ำจิ้ม', price: 50, category: 'hot' },
+            { id: 8, name: 'ผัดไทย', description: 'ใส่ไข่และถั่วงอก', price: 45, category: 'hot' },
+            { id: 9, name: 'ข้าวขาหมู', description: 'ข้าวขาหมูพะโล้', price: 55, category: 'hot' },
+            // Cold drinks
+            { id: 6, name: 'น้ำเปล่า', description: 'ขนาดเล็ก', price: 10, category: 'cold' },
+            { id: 7, name: 'น้ำอัดลม', description: 'เย็นๆ', price: 15, category: 'cold' },
+            { id: 10, name: 'ชาเย็น', description: 'หวานน้อย', price: 20, category: 'cold' },
+            { id: 11, name: 'กาแฟเย็น', description: 'หวานปานกลาง', price: 25, category: 'cold' },
+            { id: 12, name: 'น้ำส้ม', description: 'คั้นสด', price: 30, category: 'cold' }
+        ];
+
+        let cart = {};
+        let currentQRCode = null;
+        let currentCategory = 'hot';
+
+        // Load sales data from localStorage
+        function loadSalesData() {
+            const today = new Date().toISOString().split('T')[0];
+            const savedData = localStorage.getItem(`sales_${today}`);
+            return savedData ? JSON.parse(savedData) : { orders: [], date: today };
+        }
+
+        // Save sales data to localStorage
+        function saveSalesData(data) {
+            const today = new Date().toISOString().split('T')[0];
+            localStorage.setItem(`sales_${today}`, JSON.stringify(data));
+        }
+
+        // Initialize menu
+        function initMenu() {
+            const hotItems = menuItems.filter(item => item.category === 'hot');
+            const coldItems = menuItems.filter(item => item.category === 'cold');
+
+            document.getElementById('hotMenuItems').innerHTML = hotItems.map(item => createMenuItem(item)).join('');
+            document.getElementById('coldMenuItems').innerHTML = coldItems.map(item => createMenuItem(item)).join('');
+        }
+
+        function createMenuItem(item) {
+            return `
+                <div class="menu-item">
+                    <div class="item-info">
+                        <h3>${item.name}</h3>
+                        <p>${item.description}</p>
+                    </div>
+                    <div class="item-controls">
+                        <div class="quantity-control">
+                            <button class="btn-qty" onclick="decreaseQty(${item.id})">−</button>
+                            <span class="quantity" id="qty-${item.id}">0</span>
+                            <button class="btn-qty" onclick="increaseQty(${item.id})">+</button>
+                        </div>
+                        <span class="price">${item.price} ฿</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function switchCategory(category) {
+            currentCategory = category;
+            
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.category-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${category}-menu`).classList.add('active');
+        }
+
+        function increaseQty(itemId) {
+            if (!cart[itemId]) cart[itemId] = 0;
+            cart[itemId]++;
+            updateDisplay();
+        }
+
+        function decreaseQty(itemId) {
+            if (cart[itemId] && cart[itemId] > 0) {
+                cart[itemId]--;
+                if (cart[itemId] === 0) delete cart[itemId];
+            }
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            // Update quantities
+            menuItems.forEach(item => {
+                const qtyElement = document.getElementById(`qty-${item.id}`);
+                if (qtyElement) {
+                    qtyElement.textContent = cart[item.id] || 0;
+                }
+            });
+
+            // Calculate total
+            let total = 0;
+            menuItems.forEach(item => {
+                if (cart[item.id]) {
+                    total += item.price * cart[item.id];
+                }
+            });
+
+            // Update total display
+            document.getElementById('totalAmount').textContent = total.toFixed(2) + ' ฿';
+            
+            // Enable/disable pay button
+            const btnPay = document.getElementById('btnPay');
+            btnPay.disabled = total === 0;
+        }
+
+        function crc16(str) {
+            let crc = 0xFFFF;
+            const strlen = str.length;
+            for (let i = 0; i < strlen; i++) {
+                crc ^= str.charCodeAt(i) << 8;
+                for (let j = 0; j < 8; j++) {
+                    if (crc & 0x8000) {
+                        crc = (crc << 1) ^ 0x1021;
+                    } else {
+                        crc = crc << 1;
+                    }
+                }
+            }
+            return crc & 0xFFFF;
+        }
+
+        function generatePromptPayPayload(phoneNumber, amount) {
+            const formattedPhone = '0066' + phoneNumber.substring(1);
+            let payload = '';
+            payload += '000201';
+            payload += '010211';
+            
+            const aid = 'A000000677010111';
+            const tag29_00 = '00' + aid.length.toString().padStart(2, '0') + aid;
+            const tag29_01 = '01' + formattedPhone.length.toString().padStart(2, '0') + formattedPhone;
+            const tag29 = tag29_00 + tag29_01;
+            payload += '29' + tag29.length.toString().padStart(2, '0') + tag29;
+            
+            payload += '5303764';
+            
+            if (amount && amount > 0) {
+                const amountStr = amount.toFixed(2);
+                payload += '54' + amountStr.length.toString().padStart(2, '0') + amountStr;
+            }
+            
+            payload += '5802TH';
+            payload += '6304';
+            
+            const crcValue = crc16(payload);
+            const crcHex = crcValue.toString(16).toUpperCase().padStart(4, '0');
+            payload += crcHex;
+            
+            return payload;
+        }
+
+        function showQRCode() {
+            let total = 0;
+            const orderItems = [];
+            
+            menuItems.forEach(item => {
+                if (cart[item.id]) {
+                    total += item.price * cart[item.id];
+                    orderItems.push({
+                        ...item,
+                        quantity: cart[item.id],
+                        subtotal: item.price * cart[item.id]
+                    });
+                }
+            });
+
+            if (total === 0) return;
+
+            document.getElementById('modalAmount').textContent = total.toFixed(2) + ' ฿';
+
+            const qrcodeContainer = document.getElementById('qrcode');
+            qrcodeContainer.innerHTML = '';
+
+            const payload = generatePromptPayPayload('0644255591', total);
+
+            try {
+                currentQRCode = new QRCode(qrcodeContainer, {
+                    text: payload,
+                    width: 230,
+                    height: 230,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+
+                // Save order to sales data
+                const salesData = loadSalesData();
+                const order = {
+                    timestamp: new Date().toISOString(),
+                    items: orderItems,
+                    total: total
+                };
+                salesData.orders.push(order);
+                saveSalesData(salesData);
+
+                // Clear cart
+                cart = {};
+                updateDisplay();
+
+            } catch (error) {
+                console.error('Error generating QR Code:', error);
+                qrcodeContainer.innerHTML = '<p style="color: #dc3545;">ไม่สามารถสร้าง QR Code ได้<br>กรุณาลองใหม่อีกครั้ง</p>';
+            }
+
+            document.getElementById('qrModal').classList.add('active');
+        }
+
+        function closeQRModal() {
+            document.getElementById('qrModal').classList.remove('active');
+        }
+
+        function showSalesReport() {
+            const salesData = loadSalesData();
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('th-TH', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+
+            document.getElementById('reportDate').textContent = dateStr;
+
+            // Calculate totals
+            let totalOrders = salesData.orders.length;
+            let hotFoodTotal = 0;
+            let coldDrinkTotal = 0;
+            let grandTotal = 0;
+
+            salesData.orders.forEach(order => {
+                grandTotal += order.total;
+                order.items.forEach(item => {
+                    if (item.category === 'hot') {
+                        hotFoodTotal += item.subtotal;
+                    } else {
+                        coldDrinkTotal += item.subtotal;
+                    }
+                });
+            });
+
+            document.getElementById('totalOrders').textContent = `${totalOrders} ออเดอร์`;
+            document.getElementById('hotFoodTotal').textContent = `${hotFoodTotal.toFixed(2)} ฿`;
+            document.getElementById('coldDrinkTotal').textContent = `${coldDrinkTotal.toFixed(2)} ฿`;
+            document.getElementById('grandTotal').textContent = `${grandTotal.toFixed(2)} ฿`;
+
+            // Display history
+            const historyList = document.getElementById('salesHistoryList');
+            if (salesData.orders.length === 0) {
+                historyList.innerHTML = '<div class="no-sales">ยังไม่มีรายการขาย</div>';
+            } else {
+                historyList.innerHTML = salesData.orders
+                    .slice()
+                    .reverse()
+                    .map((order, index) => {
+                        const time = new Date(order.timestamp).toLocaleTimeString('th-TH', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                        const itemsList = order.items
+                            .map(item => `${item.name} x${item.quantity}`)
+                            .join(', ');
+                        
+                        return `
+                            <div class="history-item">
+                                <div class="history-header">
+                                    <span class="history-time">⏰ ${time}</span>
+                                    <span class="history-total">${order.total.toFixed(2)} ฿</span>
+                                </div>
+                                <div class="history-items">${itemsList}</div>
+                            </div>
+                        `;
+                    })
+                    .join('');
+            }
+
+            document.getElementById('salesModal').classList.add('active');
+        }
+
+        function closeSalesModal() {
+            document.getElementById('salesModal').classList.remove('active');
+        }
+
+        function resetDailySales() {
+            if (confirm('คุณต้องการล้างข้อมูลยอดขายวันนี้ใช่หรือไม่?')) {
+                const today = new Date().toISOString().split('T')[0];
+                localStorage.removeItem(`sales_${today}`);
+                closeSalesModal();
+                alert('ล้างข้อมูลเรียบร้อยแล้ว');
+            }
+        }
+
+        // Event listeners
+        document.getElementById('btnPay').addEventListener('click', showQRCode);
+
+        document.getElementById('qrModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeQRModal();
+            }
+        });
+
+        document.getElementById('salesModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSalesModal();
+            }
+        });
+
+        // Initialize
+        initMenu();
+        updateDisplay();
+    </script>
+</body>
+</html>
